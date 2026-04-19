@@ -1,3 +1,5 @@
+[Download skill.zip](https://github.com/cnpj-api/skills/releases/latest/download/skill.zip) (latest release)
+
 # cnpj-api / skills
 
 **[🇧🇷 Português](#-português)** · **[🇺🇸 English](#-english)**
