@@ -60,13 +60,7 @@ Mais scripts auxiliares:
 
 ### Limites por plano
 
-| Plano | Requisições/min |
-|---|---|
-| Free | 5 |
-| Basic | 10 |
-| Pro | 90 |
-
-Consulta em lote (`/bulk-cnpj`) requer o plano **Pro**.
+Veja planos e preços em [cnpj-api.com/precos](https://cnpj-api.com/precos). Consulta em lote (`/bulk-cnpj`) requer o plano **Pro**.
 
 ### Compatibilidade
 
@@ -154,13 +148,7 @@ Plus bundled helper scripts:
 
 ### Plan limits
 
-| Plan | Requests/min |
-|---|---|
-| Free | 5 |
-| Basic | 10 |
-| Pro | 90 |
-
-Batch endpoint (`/bulk-cnpj`) requires the **Pro** plan.
+See plans and pricing at [cnpj-api.com/precos](https://cnpj-api.com/precos). Batch endpoint (`/bulk-cnpj`) requires the **Pro** plan.
 
 ### Compatibility
 
