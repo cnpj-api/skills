@@ -1,0 +1,35 @@
+name: validate
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  validate-skill:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check SKILL.md frontmatter
+        run: |
+          for skill in skills/*/SKILL.md; do
+            echo "Checking $skill"
+            # Must start with frontmatter
+            head -1 "$skill" | grep -q '^---$' || { echo "Missing frontmatter in $skill"; exit 1; }
+            # Required fields
+            awk '/^---$/{c++; next} c==1' "$skill" | grep -q '^name:' || { echo "Missing 'name' in $skill"; exit 1; }
+            awk '/^---$/{c++; next} c==1' "$skill" | grep -q '^description:' || { echo "Missing 'description' in $skill"; exit 1; }
+            # Line-count warning at 500
+            lines=$(wc -l < "$skill")
+            if [ "$lines" -gt 500 ]; then
+              echo "::warning ::$skill is $lines lines (recommended <500, push detail into references/)"
+            fi
+            # name must match parent dir
+            dir=$(basename "$(dirname "$skill")")
+            name=$(awk '/^---$/{c++; next} c==1 && /^name:/{sub(/^name: */,""); print; exit}' "$skill" | tr -d '"' | tr -d ' ')
+            if [ "$dir" != "$name" ]; then
+              echo "Skill name '$name' does not match directory '$dir' in $skill"
+              exit 1
+            fi
+          done
