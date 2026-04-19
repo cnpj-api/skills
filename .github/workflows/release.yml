@@ -3,6 +3,10 @@ name: release
 on:
   push:
     branches: [main]
+  pull_request:
+    paths:
+      - '.github/workflows/release.yml'
+      - 'skills/**'
 
 permissions:
   contents: write
@@ -18,7 +22,22 @@ jobs:
           cd skills/cnpj-api
           zip -r "$GITHUB_WORKSPACE/skill.zip" .
 
+      - name: Verify archive structure
+        run: |
+          mkdir -p /tmp/verify
+          unzip -q skill.zip -d /tmp/verify
+          test -f /tmp/verify/SKILL.md || { echo "SKILL.md missing at zip root"; exit 1; }
+          echo "skill.zip OK — SKILL.md at root"
+
+      - name: Upload artifact (PR preview)
+        if: github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: skill-zip
+          path: skill.zip
+
       - name: Create release
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ github.run_number }}
