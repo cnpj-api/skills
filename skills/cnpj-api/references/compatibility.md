@@ -9,7 +9,7 @@ curl "https://api.cnpj-api.com.br/v1/cnpj/82845322000104?formato=receitaws" \
   -H "api-token: $CNPJ_API_TOKEN"
 ```
 
-The response matches the documented [ReceitaWS](https://receitaws.com.br) shape — same field names, same nesting. Swap the URL and token, no other code changes.
+The response matches the documented [ReceitaWS](https://receitaws.com.br) shape. Same field names, same nesting. Swap the URL and token, no other code changes.
 
 ## CNPJa format
 
@@ -36,5 +36,5 @@ Use native for new integrations. Use `receitaws` / `cnpja` only to migrate exist
 1. Swap base URL to `https://api.cnpj-api.com.br/v1`.
 2. Swap token (get one at cnpj-api.com).
 3. Append `?formato=receitaws` or `?formato=cnpja` depending on your previous provider.
-4. Verify a few canonical CNPJs — the shape should match.
+4. Verify a few canonical CNPJs. The shape should match.
 5. Update rate-limit handling if you were on a stricter plan before.

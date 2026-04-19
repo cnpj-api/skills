@@ -54,7 +54,7 @@ async function callBulk(
     if (attempt >= MAX_RETRIES) throw new Error('Max retries exceeded on 429')
     const retryAfterRaw = res.headers.get('retry-after')
     const retryAfterSec = retryAfterRaw ? Number(retryAfterRaw) : Math.min(60, 2 ** attempt)
-    process.stderr.write(`[bulk-lookup] 429 — waiting ${retryAfterSec}s (attempt ${attempt + 1})\n`)
+    process.stderr.write(`[bulk-lookup] 429. Waiting ${retryAfterSec}s (attempt ${attempt + 1})\n`)
     await sleep((Number.isFinite(retryAfterSec) ? retryAfterSec : 5) * 1000)
     return callBulk(token, cnpjs, attempt + 1)
   }

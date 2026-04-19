@@ -20,12 +20,12 @@ Log `requestId` when reporting issues.
 
 | Code | Meaning | Typical `reason` | Retry? |
 |---|---|---|---|
-| 400 | Bad request | `INVALID_CNPJ`, `INVALID_BODY` | No — fix input |
-| 401 | Unauthenticated | `TOKEN_MISSING`, `TOKEN_NOT_FOUND`, `TOKEN_REVOKED`, `TOKEN_EXPIRED` | No — rotate token |
-| 403 | Forbidden | `PLAN_REQUIRED` | No — upgrade plan |
+| 400 | Bad request | `INVALID_CNPJ`, `INVALID_BODY` | No. Fix input |
+| 401 | Unauthenticated | `TOKEN_MISSING`, `TOKEN_NOT_FOUND`, `TOKEN_REVOKED`, `TOKEN_EXPIRED` | No. Rotate token |
+| 403 | Forbidden | `PLAN_REQUIRED` | No. Upgrade plan |
 | 404 | Not found | `CNPJ_NOT_FOUND`, `PESSOA_NOT_FOUND`, `CIDADE_NOT_FOUND`, `CNAE_NOT_FOUND` | No |
-| 429 | Rate limited | `RATE_LIMIT_EXCEEDED` | **Yes** — see below |
-| 501 | Not implemented | — | No — only `/logos/{cnpj}` |
+| 429 | Rate limited | `RATE_LIMIT_EXCEEDED` | **Yes**. See below |
+| 501 | Not implemented | (none) | No. Only `/logos/{cnpj}` |
 
 ## Handling 429
 
@@ -46,9 +46,9 @@ async function call(url, opts, attempt = 0) {
 
 Rate limits per plan:
 
-- `free` — 5 req/min
-- `basic` — 10 req/min
-- `pro` — 90 req/min
+- `free`. 5 req/min
+- `basic`. 10 req/min
+- `pro`. 90 req/min
 
 `/v1/usage` is not rate-limited. Call it first if uncertain about the current plan.
 

@@ -15,14 +15,14 @@ All require a token (see `authentication.md`) except `/health/live` and `/health
 Retrieve full company profile.
 
 **Path params**
-- `cnpj` — 14 digits, no punctuation.
+- `cnpj`. 14 digits, no punctuation.
 
 **Query params**
-- `formato` *(optional)* — `receitaws` | `cnpja` | (omit for native DTO)
-- `apiToken` *(optional)* — alternative to header auth
-- `token` *(optional, legacy)* — alternative to header auth
+- `formato` *(optional)*. `receitaws` | `cnpja` | (omit for native DTO)
+- `apiToken` *(optional)*. Alternative to header auth
+- `token` *(optional, legacy)*. Alternative to header auth
 
-**Response 200** (native DTO — partial; full schema in `../assets/openapi.json`):
+**Response 200** (native DTO. Partial; full schema in `../assets/openapi.json`):
 
 ```jsonc
 {
@@ -66,7 +66,7 @@ Retrieve full company profile.
 
 ## `POST /v1/bulk-cnpj`
 
-Batch lookup — **Pro plan only**.
+Batch lookup. **Pro plan only**.
 
 **Body** (JSON):
 
@@ -124,7 +124,7 @@ Simples Nacional + SIMEI enrollment.
 Partner (sócio) profile and every company they're linked to.
 
 **Path params**
-- `pessoaId` — 32-char hex hash. Obtain it from `sócios[].pessoa_id` on a `/cnpj/{cnpj}` response.
+- `pessoaId`. 32-char hex hash. Obtain it from `sócios[].pessoa_id` on a `/cnpj/{cnpj}` response.
 
 **Response 200**:
 
@@ -193,7 +193,7 @@ Aggregates by CNAE activity code (5–7 digits; e.g. `6202300` for custom softwa
 
 ---
 
-## `GET /v1/logos/{cnpj}` — **DEPRECATED**
+## `GET /v1/logos/{cnpj}`. **DEPRECATED**
 
 Returns `501 Not Implemented`. **Do not call this endpoint.** Instead, use the `logo_url` and `icone` fields returned by `GET /v1/cnpj/{cnpj}`.
 
@@ -201,7 +201,7 @@ Returns `501 Not Implemented`. **Do not call this endpoint.** Instead, use the `
 
 ## `GET /v1/usage`
 
-Current token's plan and rate limit. **Not rate-limited** — safe to call before batch jobs.
+Current token's plan and rate limit. **Not rate-limited**. Safe to call before batch jobs.
 
 **Response 200**:
 

@@ -2,7 +2,7 @@
 
 **[🇧🇷 Português](#-português)** · **[🇺🇸 English](#-english)**
 
-Agent Skill oficial da [cnpj-api.com](https://cnpj-api.com) para consultar dados de empresas brasileiras — CNPJ, Simples Nacional, sócios, CNAE, IBGE e mais — direto do seu agente de IA (Claude Code, Cursor, Codex, Windsurf, OpenCode e +40 outros).
+Agent Skill oficial da [cnpj-api.com](https://cnpj-api.com) para consultar dados de empresas brasileiras. CNPJ, Simples Nacional, sócios, CNAE, IBGE e mais. Direto do seu agente de IA (Claude Code, Cursor, Codex, Windsurf, OpenCode e +40 outros).
 
 ```bash
 npx skills add cnpj-api/skills
@@ -12,7 +12,7 @@ npx skills add cnpj-api/skills
 
 ## 🇧🇷 Português
 
-Agent Skills são pacotes de conhecimento que agentes de IA carregam sob demanda. Este pacote ensina seu agente a consultar dados da Receita Federal sem precisar ler documentação — autenticação, endpoints, tratamento de erros e formatação de CNPJ já vêm configurados.
+Agent Skills são pacotes de conhecimento que agentes de IA carregam sob demanda. Este pacote ensina seu agente a consultar dados da Receita Federal sem precisar ler documentação. Autenticação, endpoints, tratamento de erros e formatação de CNPJ já vêm configurados.
 
 ### Instalação
 
@@ -41,7 +41,7 @@ export CNPJ_API_TOKEN="seu-token-aqui"
 
 ### O que está incluído
 
-Uma skill — `cnpj-api` — cobrindo 8 endpoints:
+Uma skill (`cnpj-api`) cobrindo 8 endpoints:
 
 | Endpoint | Plano | Descrição |
 |---|---|---|
@@ -55,8 +55,8 @@ Uma skill — `cnpj-api` — cobrindo 8 endpoints:
 
 Mais scripts auxiliares:
 
-- `validate-cnpj.ts` — validação dos dígitos verificadores (mod-11)
-- `bulk-lookup.ts` — enriquecimento em lote com tratamento automático de rate limit
+- `validate-cnpj.ts`. Validação dos dígitos verificadores (mod-11)
+- `bulk-lookup.ts`. Enriquecimento em lote com tratamento automático de rate limit
 
 ### Limites por plano
 
@@ -70,7 +70,7 @@ Consulta em lote (`/bulk-cnpj`) requer o plano **Pro**.
 
 ### Compatibilidade
 
-A skill aceita os formatos de resposta do **ReceitaWS** e do **CNPJa** via parâmetro `?formato=receitaws` ou `?formato=cnpja` — migração sem mudar código.
+A skill aceita os formatos de resposta do **ReceitaWS** e do **CNPJa** via parâmetro `?formato=receitaws` ou `?formato=cnpja`. Migração sem mudar código.
 
 ### Exemplos de uso
 
@@ -106,7 +106,7 @@ Issues e PRs são bem-vindos. Se adicionar uma nova receita ou referência de en
 
 ## 🇺🇸 English
 
-Official [cnpj-api.com](https://cnpj-api.com) Agent Skill for querying Brazilian company data — CNPJs, Simples Nacional, partners (sócios), CNAE industry classification, IBGE city aggregates and more — directly from your AI coding agent (Claude Code, Cursor, Codex, Windsurf, OpenCode, and 40+ others).
+Official [cnpj-api.com](https://cnpj-api.com) Agent Skill for querying Brazilian company data. CNPJs, Simples Nacional, partners (sócios), CNAE industry classification, IBGE city aggregates and more. Directly from your AI coding agent (Claude Code, Cursor, Codex, Windsurf, OpenCode, and 40+ others).
 
 ### Install
 
@@ -135,7 +135,7 @@ export CNPJ_API_TOKEN="your-token-here"
 
 ### What's included
 
-A single skill — `cnpj-api` — covering 8 endpoints:
+A single skill (`cnpj-api`) covering 8 endpoints:
 
 | Endpoint | Plan | Description |
 |---|---|---|
@@ -149,8 +149,8 @@ A single skill — `cnpj-api` — covering 8 endpoints:
 
 Plus bundled helper scripts:
 
-- `validate-cnpj.ts` — check-digit validation (mod-11)
-- `bulk-lookup.ts` — chunked batch enrichment with automatic rate-limit backoff
+- `validate-cnpj.ts`. Check-digit validation (mod-11)
+- `bulk-lookup.ts`. Chunked batch enrichment with automatic rate-limit backoff
 
 ### Plan limits
 
@@ -164,7 +164,7 @@ Batch endpoint (`/bulk-cnpj`) requires the **Pro** plan.
 
 ### Compatibility
 
-The skill accepts **ReceitaWS** and **CNPJa** response formats via `?formato=receitaws` or `?formato=cnpja` — drop-in migration without changing parsing code.
+The skill accepts **ReceitaWS** and **CNPJa** response formats via `?formato=receitaws` or `?formato=cnpja`. Drop-in migration without changing parsing code.
 
 ### Usage examples
 

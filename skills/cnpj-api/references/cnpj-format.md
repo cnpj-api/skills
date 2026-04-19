@@ -10,9 +10,9 @@ XX.XXX.XXX/YYYY-ZZ
  root     branch  check
 ```
 
-- First 8 digits — company root (identifies the legal entity)
-- 4 digits — branch / filial number (`0001` = headquarters)
-- Last 2 digits — check digits (mod-11)
+- First 8 digits. Company root (identifies the legal entity)
+- 4 digits. Branch / filial number (`0001` = headquarters)
+- Last 2 digits. Check digits (mod-11)
 
 ## In API URLs
 
@@ -27,7 +27,7 @@ If the cleaned string isn't exactly 14 digits, the API returns `400 INVALID_CNPJ
 
 ## Check-digit validation
 
-The two trailing digits are calculated from the first 12 using multiplier weights and mod-11. A CNPJ can be **well-formed but not registered** — check digits only verify the number's structure, not whether the company exists.
+The two trailing digits are calculated from the first 12 using multiplier weights and mod-11. A CNPJ can be **well-formed but not registered**. Check digits only verify the number's structure, not whether the company exists.
 
 Use `scripts/validate-cnpj.ts`:
 

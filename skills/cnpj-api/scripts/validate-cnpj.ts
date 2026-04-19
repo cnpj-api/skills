@@ -5,7 +5,7 @@
  * Validates a Brazilian CNPJ using the mod-11 check-digit algorithm.
  * Accepts input from argv[2] or stdin.
  *
- * Output: single line of JSON — { valid: boolean, cnpj: "14-digit" | null, reason?: string }
+ * Output: single line of JSON. { valid: boolean, cnpj: "14-digit" | null, reason?: string }
  *
  * Usage:
  *   node validate-cnpj.ts 82.845.322/0001-04

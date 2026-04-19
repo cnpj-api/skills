@@ -10,7 +10,7 @@ metadata:
 
 # cnpj-api
 
-Query Brazilian company data from the [cnpj-api.com](https://cnpj-api.com) REST API — CNPJ records, Simples Nacional status, sócios (partners), CNAE industry aggregates, IBGE city aggregates, and company logos. Data is sourced from Brazil's Receita Federal (Federal Revenue).
+Query Brazilian company data from the [cnpj-api.com](https://cnpj-api.com) REST API. CNPJ records, Simples Nacional status, sócios (partners), CNAE industry aggregates, IBGE city aggregates, and company logos. Data is sourced from Brazil's Receita Federal (Federal Revenue).
 
 ## When to use this skill
 
@@ -50,19 +50,19 @@ See [references/authentication.md](references/authentication.md) for details.
 https://api.cnpj-api.com.br/v1
 ```
 
-All endpoints are `/v1/*`. Health checks (`/health/live`, `/health/ready`) are public — do not send a token.
+All endpoints are `/v1/*`. Health checks (`/health/live`, `/health/ready`) are public. Do not send a token.
 
 ## Endpoints
 
 | Method | Path | Plan | Purpose |
 |---|---|---|---|
-| GET | `/v1/cnpj/{cnpj}` | free+ | Company profile — address, activities, partners, status |
+| GET | `/v1/cnpj/{cnpj}` | free+ | Company profile. Address, activities, partners, status |
 | POST | `/v1/bulk-cnpj` | **pro** | Batch lookup (≤20 CNPJs per call) |
 | GET | `/v1/simples/{cnpj}` | free+ | Simples Nacional + SIMEI enrollment status |
 | GET | `/v1/socios/{pessoaId}` | free+ | Partner profile + every company they're part of |
-| GET | `/v1/cidades/{id}` | free+ | IBGE city aggregates — top companies by capital, recent registrations |
+| GET | `/v1/cidades/{id}` | free+ | IBGE city aggregates. Top companies by capital, recent registrations |
 | GET | `/v1/cnae/{cnae}` | free+ | CNAE industry aggregates |
-| GET | `/v1/logos/{cnpj}` | — | **501 deprecated.** Use `logo_url` field on `/cnpj/{cnpj}` response instead. |
+| GET | `/v1/logos/{cnpj}` | n/a | **501 deprecated.** Use `logo_url` field on `/cnpj/{cnpj}` response instead. |
 | GET | `/v1/usage` | free+ | Current plan tier + rate limit (not rate-limited itself) |
 
 Full per-endpoint reference with all params, response schemas, and examples: [references/endpoints.md](references/endpoints.md).
@@ -143,7 +143,7 @@ curl "https://api.cnpj-api.com.br/v1/usage" \
   -H "api-token: $CNPJ_API_TOKEN"
 ```
 
-Returns `{ plan, rate_limit: { limit, window } }`. **Not rate-limited** — safe to call before a batch job.
+Returns `{ plan, rate_limit: { limit, window } }`. **Not rate-limited**. Safe to call before a batch job.
 
 ## Response format compatibility
 
@@ -172,18 +172,18 @@ All errors use this envelope:
 
 Common status codes:
 
-- `400` — CNPJ format invalid (not 14 digits)
-- `401` — token missing / not found / revoked / expired
-- `403` — plan does not allow this endpoint (e.g. bulk on free)
-- `404` — CNPJ or resource not found
-- `429` — rate limit exceeded; check `Retry-After` header
-- `501` — endpoint not implemented (only `/logos/{cnpj}`)
+- `400`. CNPJ format invalid (not 14 digits)
+- `401`. Token missing / not found / revoked / expired
+- `403`. Plan does not allow this endpoint (e.g. bulk on free)
+- `404`. CNPJ or resource not found
+- `429`. Rate limit exceeded; check `Retry-After` header
+- `501`. Endpoint not implemented (only `/logos/{cnpj}`)
 
 Full matrix and retry strategy: [references/errors.md](references/errors.md).
 
 ## CNPJ formatting
 
-CNPJs must be **14 digits** in URLs — strip punctuation from user input:
+CNPJs must be **14 digits** in URLs. Strip punctuation from user input:
 
 ```js
 const clean = (cnpj) => String(cnpj).replace(/\D/g, '')
@@ -193,16 +193,16 @@ Check-digit validation: use the included helper `scripts/validate-cnpj.ts`. Deta
 
 ## Bundled scripts
 
-- [`scripts/validate-cnpj.ts`](scripts/validate-cnpj.ts) — check-digit validator. Reads a CNPJ from argv or stdin, prints `{ valid: boolean, cnpj: "14-digit" }` as JSON.
-- [`scripts/bulk-lookup.ts`](scripts/bulk-lookup.ts) — reads CNPJs from stdin (one per line), calls `/bulk-cnpj` in chunks of 20, honors `Retry-After`, prints NDJSON results.
+- [`scripts/validate-cnpj.ts`](scripts/validate-cnpj.ts). Check-digit validator. Reads a CNPJ from argv or stdin, prints `{ valid: boolean, cnpj: "14-digit" }` as JSON.
+- [`scripts/bulk-lookup.ts`](scripts/bulk-lookup.ts). Reads CNPJs from stdin (one per line), calls `/bulk-cnpj` in chunks of 20, honors `Retry-After`, prints NDJSON results.
 
 Both scripts require `CNPJ_API_TOKEN` in the environment.
 
 ## Reference documents
 
-- [references/endpoints.md](references/endpoints.md) — full per-endpoint schema, parameters, and examples
-- [references/authentication.md](references/authentication.md) — tokens, headers, env vars
-- [references/errors.md](references/errors.md) — error envelope, HTTP codes, retry strategy
-- [references/compatibility.md](references/compatibility.md) — ReceitaWS / CNPJa response formats
-- [references/cnpj-format.md](references/cnpj-format.md) — 14-digit cleaning, check-digit algorithm, alphanumeric variant
-- [references/recipes.md](references/recipes.md) — longer multi-step workflows
+- [references/endpoints.md](references/endpoints.md). Full per-endpoint schema, parameters, and examples
+- [references/authentication.md](references/authentication.md). Tokens, headers, env vars
+- [references/errors.md](references/errors.md). Error envelope, HTTP codes, retry strategy
+- [references/compatibility.md](references/compatibility.md). ReceitaWS / CNPJa response formats
+- [references/cnpj-format.md](references/cnpj-format.md). 14-digit cleaning, check-digit algorithm, alphanumeric variant
+- [references/recipes.md](references/recipes.md). Longer multi-step workflows
