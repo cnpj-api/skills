@@ -5,7 +5,7 @@
 ## ReceitaWS format
 
 ```bash
-curl "https://api.cnpj-api.com.br/v1/cnpj/82845322000104?formato=receitaws" \
+curl "https://api.cnpj-api.com/v1/cnpj/82845322000104?formato=receitaws" \
   -H "api-token: $CNPJ_API_TOKEN"
 ```
 
@@ -14,7 +14,7 @@ The response matches the documented [ReceitaWS](https://receitaws.com.br) shape.
 ## CNPJa format
 
 ```bash
-curl "https://api.cnpj-api.com.br/v1/cnpj/82845322000104?formato=cnpja" \
+curl "https://api.cnpj-api.com/v1/cnpj/82845322000104?formato=cnpja" \
   -H "api-token: $CNPJ_API_TOKEN"
 ```
 
@@ -33,7 +33,7 @@ Use native for new integrations. Use `receitaws` / `cnpja` only to migrate exist
 
 ## Migration checklist
 
-1. Swap base URL to `https://api.cnpj-api.com.br/v1`.
+1. Swap base URL to `https://api.cnpj-api.com/v1`.
 2. Swap token (get one at cnpj-api.com).
 3. Append `?formato=receitaws` or `?formato=cnpja` depending on your previous provider.
 4. Verify a few canonical CNPJs. The shape should match.

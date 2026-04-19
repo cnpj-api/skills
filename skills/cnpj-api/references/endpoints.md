@@ -3,7 +3,7 @@
 All endpoints are under the base URL:
 
 ```
-https://api.cnpj-api.com.br/v1
+https://api.cnpj-api.com/v1
 ```
 
 All require a token (see `authentication.md`) except `/health/live` and `/health/ready`.
@@ -15,12 +15,14 @@ All require a token (see `authentication.md`) except `/health/live` and `/health
 Retrieve full company profile.
 
 **Path params**
+
 - `cnpj`. 14 digits, no punctuation.
 
 **Query params**
-- `formato` *(optional)*. `receitaws` | `cnpja` | (omit for native DTO)
-- `apiToken` *(optional)*. Alternative to header auth
-- `token` *(optional, legacy)*. Alternative to header auth
+
+- `formato` _(optional)_. `receitaws` | `cnpja` | (omit for native DTO)
+- `apiToken` _(optional)_. Alternative to header auth
+- `token` _(optional, legacy)_. Alternative to header auth
 
 **Response 200** (native DTO. Partial; full schema in `../assets/openapi.json`):
 
@@ -50,13 +52,16 @@ Retrieve full company profile.
     "municipio": "JARAGUA DO SUL",
     "uf": "SC",
     "cep": "89256900",
-    "pais": { "codigo": 1058, "nome": "BRASIL" }
+    "pais": { "codigo": 1058, "nome": "BRASIL" },
   },
   "empresa": {
-    "capital_social": 1500000000.00,
+    "capital_social": 1500000000.0,
     "porte": { "codigo": 5, "descricao": "DEMAIS" },
-    "natureza_juridica": { "codigo": 2046, "descricao": "Sociedade Anônima Aberta" }
-  }
+    "natureza_juridica": {
+      "codigo": 2046,
+      "descricao": "Sociedade Anônima Aberta",
+    },
+  },
 }
 ```
 
@@ -81,7 +86,12 @@ Batch lookup. **Pro plan only**.
 
 ```json
 [
-  { "cnpj": "82845322000104", "data": { /* EstabelecimentoDto */ } },
+  {
+    "cnpj": "82845322000104",
+    "data": {
+      /* EstabelecimentoDto */
+    }
+  },
   { "cnpj": "00000000000000", "data": null }
 ]
 ```
@@ -124,6 +134,7 @@ Simples Nacional + SIMEI enrollment.
 Partner (sócio) profile and every company they're linked to.
 
 **Path params**
+
 - `pessoaId`. 32-char hex hash. Obtain it from `sócios[].pessoa_id` on a `/cnpj/{cnpj}` response.
 
 **Response 200**:
@@ -143,7 +154,7 @@ Partner (sócio) profile and every company they're linked to.
       "cnpj": "...",
       "razao_social": "...",
       "nome_fantasia": "...",
-      "capital_social": 50000.00,
+      "capital_social": 50000.0,
       "data_entrada": "2020-01-15",
       "qualificacao": { "codigo": 10, "descricao": "Sócio-Gerente" },
       "situacao": { "codigo": 2, "descricao": "Ativa" }
@@ -166,10 +177,16 @@ City-level aggregates by IBGE município code (7 digits; e.g. São Paulo = `3550
 {
   "municipio_codigo": 3550308,
   "nome": "São Paulo",
-  "capital_social_total": 125000000000.00,
-  "empresas_maior_capital": [ /* CompanyRefDto[] */ ],
-  "empresas_recentes": [ /* CompanyRefDto[] */ ],
-  "socios_maior_capital": [ /* PartnerRefDto[] */ ]
+  "capital_social_total": 125000000000.0,
+  "empresas_maior_capital": [
+    /* CompanyRefDto[] */
+  ],
+  "empresas_recentes": [
+    /* CompanyRefDto[] */
+  ],
+  "socios_maior_capital": [
+    /* PartnerRefDto[] */
+  ]
 }
 ```
 
@@ -185,9 +202,13 @@ Aggregates by CNAE activity code (5–7 digits; e.g. `6202300` for custom softwa
 {
   "codigo": 6202300,
   "descricao": "Desenvolvimento e licenciamento de programas de computador customizáveis",
-  "capital_social_total": 500000000.00,
-  "empresas_maior_capital": [ /* CompanyRefDto[] */ ],
-  "empresas_recentes": [ /* CompanyRefDto[] */ ]
+  "capital_social_total": 500000000.0,
+  "empresas_maior_capital": [
+    /* CompanyRefDto[] */
+  ],
+  "empresas_recentes": [
+    /* CompanyRefDto[] */
+  ]
 }
 ```
 

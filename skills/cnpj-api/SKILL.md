@@ -1,6 +1,6 @@
 ---
 name: cnpj-api
-description: Query Brazilian company data (CNPJ, Cadastro Nacional da Pessoa Jurídica) from Receita Federal via the cnpj-api.com REST API. Use this skill whenever the user asks about a Brazilian company, supplier, CNPJ lookup, Simples Nacional status (MEI, ME, EPP), sócios (partners, shareholders, quadro societário), CNAE (industry classification), IBGE city aggregates, razão social, nome fantasia, company logo, or needs to enrich, validate, or batch-query Brazilian business records. Provides 8 endpoints covering single CNPJ lookup, bulk lookup (up to 20), Simples Nacional, partner profiles, city stats, CNAE stats, logos, and plan usage. Accepts ReceitaWS and CNPJa response formats for drop-in migration. Auth via api-token header or apiToken query param. Base URL https://api.cnpj-api.com.br/v1. Rate limits free 5/min, basic 10/min, pro 90/min. Covers Brazil tax ID, federal revenue, company registry, supplier validation, KYC, KYB.
+description: Query Brazilian company data (CNPJ, Cadastro Nacional da Pessoa Jurídica) from Receita Federal via the cnpj-api.com REST API. Use this skill whenever the user asks about a Brazilian company, supplier, CNPJ lookup, Simples Nacional status (MEI, ME, EPP), sócios (partners, shareholders, quadro societário), CNAE (industry classification), IBGE city aggregates, razão social, nome fantasia, company logo, or needs to enrich, validate, or batch-query Brazilian business records. Provides 8 endpoints covering single CNPJ lookup, bulk lookup (up to 20), Simples Nacional, partner profiles, city stats, CNAE stats, logos, and plan usage. Accepts ReceitaWS and CNPJa response formats for drop-in migration. Auth via api-token header or apiToken query param. Base URL https://api.cnpj-api.com/v1. Rate limits free 5/min, basic 10/min, pro 90/min. Covers Brazil tax ID, federal revenue, company registry, supplier validation, KYC, KYB.
 license: MIT
 metadata:
   version: "0.1.0"
@@ -47,33 +47,33 @@ See [references/authentication.md](references/authentication.md) for details.
 ## Base URL
 
 ```
-https://api.cnpj-api.com.br/v1
+https://api.cnpj-api.com/v1
 ```
 
 All endpoints are `/v1/*`. Health checks (`/health/live`, `/health/ready`) are public. Do not send a token.
 
 ## Endpoints
 
-| Method | Path | Plan | Purpose |
-|---|---|---|---|
-| GET | `/v1/cnpj/{cnpj}` | free+ | Company profile. Address, activities, partners, status |
-| POST | `/v1/bulk-cnpj` | **pro** | Batch lookup (≤20 CNPJs per call) |
-| GET | `/v1/simples/{cnpj}` | free+ | Simples Nacional + SIMEI enrollment status |
-| GET | `/v1/socios/{pessoaId}` | free+ | Partner profile + every company they're part of |
-| GET | `/v1/cidades/{id}` | free+ | IBGE city aggregates. Top companies by capital, recent registrations |
-| GET | `/v1/cnae/{cnae}` | free+ | CNAE industry aggregates |
-| GET | `/v1/logos/{cnpj}` | n/a | **501 deprecated.** Use `logo_url` field on `/cnpj/{cnpj}` response instead. |
-| GET | `/v1/usage` | free+ | Current plan tier + rate limit (not rate-limited itself) |
+| Method | Path                    | Plan    | Purpose                                                                      |
+| ------ | ----------------------- | ------- | ---------------------------------------------------------------------------- |
+| GET    | `/v1/cnpj/{cnpj}`       | free+   | Company profile. Address, activities, partners, status                       |
+| POST   | `/v1/bulk-cnpj`         | **pro** | Batch lookup (≤20 CNPJs per call)                                            |
+| GET    | `/v1/simples/{cnpj}`    | free+   | Simples Nacional + SIMEI enrollment status                                   |
+| GET    | `/v1/socios/{pessoaId}` | free+   | Partner profile + every company they're part of                              |
+| GET    | `/v1/cidades/{id}`      | free+   | IBGE city aggregates. Top companies by capital, recent registrations         |
+| GET    | `/v1/cnae/{cnae}`       | free+   | CNAE industry aggregates                                                     |
+| GET    | `/v1/logos/{cnpj}`      | n/a     | **501 deprecated.** Use `logo_url` field on `/cnpj/{cnpj}` response instead. |
+| GET    | `/v1/usage`             | free+   | Current plan tier + rate limit (not rate-limited itself)                     |
 
 Full per-endpoint reference with all params, response schemas, and examples: [references/endpoints.md](references/endpoints.md).
 
 ## Rate limits
 
-| Plan | Requests / minute |
-|---|---|
-| free | 5 |
-| basic | 10 |
-| pro | 90 |
+| Plan  | Requests / minute |
+| ----- | ----------------- |
+| free  | 5                 |
+| basic | 10                |
+| pro   | 90                |
 
 On 429 responses, respect the `Retry-After` header and back off. Bulk (`/bulk-cnpj`) requires the `pro` plan.
 
@@ -82,22 +82,21 @@ On 429 responses, respect the `Retry-After` header and back off. Bulk (`/bulk-cn
 ### 1. Look up a single CNPJ
 
 ```bash
-curl "https://api.cnpj-api.com.br/v1/cnpj/82845322000104" \
+curl "https://api.cnpj-api.com/v1/cnpj/82845322000104" \
   -H "api-token: $CNPJ_API_TOKEN"
 ```
 
 ```js
-const res = await fetch(
-  'https://api.cnpj-api.com.br/v1/cnpj/82845322000104',
-  { headers: { 'api-token': process.env.CNPJ_API_TOKEN } }
-)
-const data = await res.json()
+const res = await fetch("https://api.cnpj-api.com/v1/cnpj/82845322000104", {
+  headers: { "api-token": process.env.CNPJ_API_TOKEN },
+});
+const data = await res.json();
 ```
 
 ```python
 import os, requests
 r = requests.get(
-    'https://api.cnpj-api.com.br/v1/cnpj/82845322000104',
+    'https://api.cnpj-api.com/v1/cnpj/82845322000104',
     headers={'api-token': os.environ['CNPJ_API_TOKEN']},
 )
 data = r.json()
@@ -108,7 +107,7 @@ Returned fields include `razao_social`, `nome_fantasia`, `situacao`, `endereco`,
 ### 2. Check Simples Nacional status
 
 ```bash
-curl "https://api.cnpj-api.com.br/v1/simples/82845322000104" \
+curl "https://api.cnpj-api.com/v1/simples/82845322000104" \
   -H "api-token: $CNPJ_API_TOKEN"
 ```
 
@@ -119,7 +118,7 @@ Returns `{ simples: { optante, data_opcao, data_exclusao }, simei: { ... } }`.
 Chunk input to 20 CNPJs per request, respect `Retry-After` on 429.
 
 ```bash
-curl -X POST "https://api.cnpj-api.com.br/v1/bulk-cnpj" \
+curl -X POST "https://api.cnpj-api.com/v1/bulk-cnpj" \
   -H "api-token: $CNPJ_API_TOKEN" \
   -H "content-type: application/json" \
   -d '{"cnpjs":["82845322000104","60316817000103"]}'
@@ -130,7 +129,7 @@ For >20 CNPJs, use the included helper: `scripts/bulk-lookup.ts` (see below).
 ### 4. City aggregates
 
 ```bash
-curl "https://api.cnpj-api.com.br/v1/cidades/3550308" \
+curl "https://api.cnpj-api.com/v1/cidades/3550308" \
   -H "api-token: $CNPJ_API_TOKEN"
 ```
 
@@ -139,7 +138,7 @@ The `id` is the IBGE município code (7 digits, e.g. São Paulo = 3550308).
 ### 5. Check the user's current plan
 
 ```bash
-curl "https://api.cnpj-api.com.br/v1/usage" \
+curl "https://api.cnpj-api.com/v1/usage" \
   -H "api-token: $CNPJ_API_TOKEN"
 ```
 
@@ -150,7 +149,7 @@ Returns `{ plan, rate_limit: { limit, window } }`. **Not rate-limited**. Safe to
 For drop-in migration from **ReceitaWS** or **CNPJa**, append `?formato=receitaws` or `?formato=cnpja` to `/v1/cnpj/{cnpj}`:
 
 ```bash
-curl "https://api.cnpj-api.com.br/v1/cnpj/82845322000104?formato=receitaws" \
+curl "https://api.cnpj-api.com/v1/cnpj/82845322000104?formato=receitaws" \
   -H "api-token: $CNPJ_API_TOKEN"
 ```
 
@@ -186,7 +185,7 @@ Full matrix and retry strategy: [references/errors.md](references/errors.md).
 CNPJs must be **14 digits** in URLs. Strip punctuation from user input:
 
 ```js
-const clean = (cnpj) => String(cnpj).replace(/\D/g, '')
+const clean = (cnpj) => String(cnpj).replace(/\D/g, "");
 ```
 
 Check-digit validation: use the included helper `scripts/validate-cnpj.ts`. Details and the mod-11 algorithm in [references/cnpj-format.md](references/cnpj-format.md).
