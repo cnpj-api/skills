@@ -16,8 +16,16 @@ const BASE_URL = "https://api.cnpj-api.com/v1";
 const CHUNK_SIZE = 20;
 const MAX_RETRIES = 5;
 
+/** Strips punctuation but keeps letters, which are significant since July 2026. */
 function clean(raw: string): string {
-  return String(raw).replace(/\D/g, "");
+  return String(raw)
+    .replace(/[.\-/\s]/g, "")
+    .toUpperCase();
+}
+
+/** Positions 1-12 may be alphanumeric; the two check digits are always numeric. */
+function isWellFormed(cnpj: string): boolean {
+  return /^[A-Z0-9]{12}\d{2}$/.test(cnpj);
 }
 
 async function readStdinLines(): Promise<string[]> {
@@ -79,11 +87,9 @@ async function main(): Promise<void> {
   }
 
   const raw = await readStdinLines();
-  const cnpjs = Array.from(
-    new Set(raw.map(clean).filter((c) => c.length === 14)),
-  );
+  const cnpjs = Array.from(new Set(raw.map(clean).filter(isWellFormed)));
   if (cnpjs.length === 0) {
-    process.stderr.write("No valid 14-digit CNPJs on stdin\n");
+    process.stderr.write("No valid 14-character CNPJs on stdin\n");
     process.exit(2);
   }
 

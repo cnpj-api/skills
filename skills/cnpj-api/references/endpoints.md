@@ -16,7 +16,7 @@ Retrieve full company profile.
 
 **Path params**
 
-- `cnpj`. 14 digits, no punctuation.
+- `cnpj`. 14 characters, no punctuation. Traditional (`82845322000104`) or alphanumeric (`00000000E08G12`); lowercase is normalised.
 
 **Query params**
 
@@ -80,7 +80,7 @@ Batch lookup. **Pro plan only**.
 ```
 
 - 1–20 items per call
-- Each must be 14 digits
+- Each must be 14 characters (traditional or alphanumeric)
 
 **Response 200**:
 
