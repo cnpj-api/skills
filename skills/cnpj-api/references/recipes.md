@@ -16,7 +16,7 @@ Output: company status + tax regime + partner exposure summary.
 
 Input: CSV with `cnpj` column (possibly formatted with punctuation).
 
-1. Clean each CNPJ to 14 digits
+1. Clean each CNPJ to 14 characters, stripping punctuation but keeping any letters
 2. `GET /v1/usage`. Confirm current plan before committing to a long run
 3. Chunk to 20 per call, `POST /v1/bulk-cnpj` (requires Pro)
 4. Merge results back into the CSV, preserving original rows where `data === null`

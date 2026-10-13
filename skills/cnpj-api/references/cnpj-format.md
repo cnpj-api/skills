@@ -2,7 +2,7 @@
 
 ## Structure
 
-A CNPJ has **14 digits**, split into:
+A CNPJ has **14 characters**, split into:
 
 ```
 XX.XXX.XXX/YYYY-ZZ
@@ -10,20 +10,25 @@ XX.XXX.XXX/YYYY-ZZ
  root     branch  check
 ```
 
-- First 8 digits. Company root (identifies the legal entity)
-- 4 digits. Branch / filial number (`0001` = headquarters)
-- Last 2 digits. Check digits (mod-11)
+- First 8 characters. Company root (identifies the legal entity)
+- 4 characters. Branch / filial number (`0001` = headquarters)
+- Last 2 characters. Check digits (mod-11), always numeric
+
+Positions 1-12 may be `[A-Z0-9]`; only the two check digits are guaranteed numeric.
 
 ## In API URLs
 
-Always **strip punctuation** before calling the API:
+Always **strip punctuation** before calling the API, but keep the letters:
 
 ```js
-const clean = (cnpj) => String(cnpj).replace(/\D/g, '')
+const clean = (cnpj) => String(cnpj).replace(/[.\-/\s]/g, '').toUpperCase()
 // "82.845.322/0001-04" → "82845322000104"
+// "00.000.000/e08g-12" → "00000000E08G12"
 ```
 
-If the cleaned string isn't exactly 14 digits, the API returns `400 INVALID_CNPJ`.
+`replace(/\D/g, '')` is wrong: it silently turns `00000000E08G12` into `000000000812`, a different (and unregistered) number.
+
+If the cleaned string isn't exactly 14 characters, the API returns `400 INVALID_CNPJ`. The API uppercases for you, so lowercase input is accepted.
 
 ## Check-digit validation
 
@@ -36,14 +41,18 @@ echo "82845322000104" | node skills/cnpj-api/scripts/validate-cnpj.ts
 # {"valid":true,"cnpj":"82845322000104"}
 ```
 
-## Alphanumeric CNPJ (2026+)
+## Alphanumeric CNPJ (in force since July 2026)
 
-Receita Federal is rolling out alphanumeric CNPJs. When encountered, convert characters to their ASCII codes minus 48 for the check-digit calculation. The API accepts both formats; pass the user-provided string as-is (after stripping punctuation and dashes, keeping letters).
+Positions 1-12 may contain `A-Z` as well as `0-9`; the two check digits stay numeric. For the mod-11 sum, convert each character to its ASCII code minus 48, so `0`-`9` keep their face value and `A` = 17 through `Z` = 42. The weights and the rest of the algorithm are unchanged.
 
-For most workflows you only encounter all-digit CNPJs. Support for alphanumeric in existing databases is optional.
+Real example already in Receita's published data: `00000000E08G12`, a Banco do Brasil branch in Brasília opened 2026-07-31.
+
+The API accepts both formats on every endpoint. Pass the user-provided string after stripping punctuation and **keeping the letters**.
+
+These are rare today but no longer hypothetical: treat alphanumeric support as required, not optional. A digit-stripping `clean()` fails silently — it produces a well-formed 12-character string rather than an error — so audit any existing `/\D/g` in your own code.
 
 ## Quick sanity rules
 
-- 14 characters after stripping punctuation
-- Not all the same digit (`00000000000000` and similar are invalid)
+- 14 characters after stripping punctuation, matching `^[A-Z0-9]{12}\d{2}$`
+- Not all the same digit (`00000000000000` and similar are invalid). This only applies to traditional CNPJs
 - Check digits match the mod-11 calculation

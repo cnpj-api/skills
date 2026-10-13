@@ -16,7 +16,7 @@ Query Brazilian company data from the [cnpj-api.com](https://cnpj-api.com) REST 
 
 Use this skill whenever the user mentions any of:
 
-- A **CNPJ** number (14 digits, Brazilian tax ID for companies)
+- A **CNPJ** number (14 characters, Brazilian tax ID for companies; letters are legal since July 2026)
 - **Consulting, looking up, or validating** a Brazilian company / supplier / vendor
 - **Simples Nacional**, MEI, ME, EPP, or SIMEI status
 - **Sócios**, partners, shareholders, quadro societário
@@ -171,7 +171,7 @@ All errors use this envelope:
 
 Common status codes:
 
-- `400`. CNPJ format invalid (not 14 digits)
+- `400`. CNPJ format invalid (not 14 characters, or the check digits do not match)
 - `401`. Token missing / not found / revoked / expired
 - `403`. Plan does not allow this endpoint (e.g. bulk on free)
 - `404`. CNPJ or resource not found
@@ -182,17 +182,21 @@ Full matrix and retry strategy: [references/errors.md](references/errors.md).
 
 ## CNPJ formatting
 
-CNPJs must be **14 digits** in URLs. Strip punctuation from user input:
+CNPJs must be **14 characters** in URLs. Strip punctuation from user input, but **keep the letters** — since July 2026 positions 1-12 may be `[A-Z0-9]`:
 
 ```js
-const clean = (cnpj) => String(cnpj).replace(/\D/g, "");
+const clean = (cnpj) => String(cnpj).replace(/[.\-/\s]/g, "").toUpperCase();
+// "82.845.322/0001-04" → "82845322000104"
+// "00.000.000/e08g-12" → "00000000E08G12"
 ```
+
+Never use `replace(/\D/g, "")`: it turns `00000000E08G12` into `000000000812`, which the API rejects with `400`.
 
 Check-digit validation: use the included helper `scripts/validate-cnpj.ts`. Details and the mod-11 algorithm in [references/cnpj-format.md](references/cnpj-format.md).
 
 ## Bundled scripts
 
-- [`scripts/validate-cnpj.ts`](scripts/validate-cnpj.ts). Check-digit validator. Reads a CNPJ from argv or stdin, prints `{ valid: boolean, cnpj: "14-digit" }` as JSON.
+- [`scripts/validate-cnpj.ts`](scripts/validate-cnpj.ts). Check-digit validator for both formats. Reads a CNPJ from argv or stdin, prints `{ valid: boolean, cnpj: "14-character", type: "traditional" | "alphanumeric" }` as JSON.
 - [`scripts/bulk-lookup.ts`](scripts/bulk-lookup.ts). Reads CNPJs from stdin (one per line), calls `/bulk-cnpj` in chunks of 20, honors `Retry-After`, prints NDJSON results.
 
 Both scripts require `CNPJ_API_TOKEN` in the environment.
